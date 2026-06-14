@@ -23,3 +23,11 @@ jobs:
       run: |
         docker build -t test-app:local .
         echo "Docker image built successfully!"
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'test-app:local'
+        format: 'table'
+        exit-code: '0'
+        severity: 'CRITICAL,HIGH'
