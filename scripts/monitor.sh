@@ -17,10 +17,8 @@ else
     echo "[$TIMESTAMP] ALERT: Website is DOWN with Status Code: $HTTP_STATUS" >> "$LOG_FILE"
     echo "Website is DOWN! Attempting automatic recovery..."
     
-    # Try to restart the docker containers
-    docker-compose restart gateway web
-    
-    if [ $? -eq 0 ]; then
+    # CyberSec/DevOps Best Practice: Check command exit code directly instead of using $?
+    if docker-compose restart gateway web; then
         echo "[$TIMESTAMP] RECOVERY: Containers restarted successfully." >> "$LOG_FILE"
         echo "Recovery successful."
     else
