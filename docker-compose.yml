@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Наш бэкенд (Python Flask приложение)
+  web:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devops_db
+      - DB_USER=postgres
+      - DB_PASSWORD=my_secure_password_2026
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # База данных PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=devops_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=my_secure_password_2026
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+# Изолированная сеть для безопасности, чтобы контейнеры видели друг друга
+networks:
+  app_network:
+    driver: bridge
+
+# Постоянное хранилище (Volume), чтобы при перезапуске контейнера данные визитов не удалялись
+volumes:
+  pgdata:
