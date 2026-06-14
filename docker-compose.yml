@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   # Наш бэкенд (Python Flask приложение)
