@@ -1,0 +1,29 @@
+name: CI DevOps Pipeline
+
+# Запускать пайплайн при каждом пуше в ветку main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Шаг 1: Скачиваем код репозитория на виртуальную машину GitHub
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Шаг 2: Проверяем синтаксис Bash-скриптов с помощью ShellCheck
+    - name: Run ShellCheck for Bash scripts
+      uses: ludeeus/action-shellcheck@master
+      with:
+        scandir: 'scripts'
+
+    # Шаг 3: Проверяем, собирается ли наш Docker-образ без ошибок
+    - name: Build Docker Image Test
+      run: |
+        docker build -t test-app:local .
+        echo "Docker image built successfully!"
